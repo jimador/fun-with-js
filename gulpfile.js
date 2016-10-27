@@ -9,18 +9,19 @@ var plugins = require('gulp-load-plugins')({
             'gulp-main-bower-files': 'bowerFiles'
         }
     });
+// var del = require('del');
 
 // Start Watching: Run "gulp"
-gulp.task('default', ['bower', 'thin-bower', 'build-js', 'build-css']);
+gulp.task('default', ['bower', 'thin:bower', 'build:css']);
 
 // Run "gulp server"
 gulp.task('server', ['serve', 'watch']);
 
 // watch task
 gulp.task('watch', function () {
-    gulp.watch('scripts/libs/**/*.js', ['thin-bower']);
-    gulp.watch('scripts/app/**/*.js', ['build-js']);
-    gulp.watch('less/**/*.less', ['build-css']);
+    gulp.watch('scripts/libs/**/*.js', ['thin:bower']);
+    gulp.watch('scripts/app/**/*.js', ['build:js']);
+    gulp.watch('less/**/*.less', ['build:css']);
 });
 
 // Folder "/" serving at http://localhost:8888
@@ -33,21 +34,19 @@ gulp.task('serve', function () {
     });
 });
 
-// bower directory for main-bower-files task to pull from
-var config = {
-    bowerDir: './bower_components'
-};
+// Build and run app on 8888
+gulp.task('build:run', ['default', 'server']);
 
 // pull in all bower dependencies: "gulp bower"
 gulp.task('bower', function() {
     return plugins.bower()
-        .pipe(gulp.dest(config.bowerDir));
+        .pipe(gulp.dest('./bower_components'));
 });
 
 // This task will loop through all of the bower components and pull out the
 // .js files we care about: -> "gulp thin-bower"
-gulp.task('thin-bower', ['bower'], function() {
-    var filterJS = plugins.gulpFilter('**/*.js', {
+gulp.task('thin:bower', ['bower'], function() {
+    var filterJS = plugins.filter('**/*.js', {
         restore: true
     });
     return gulp.src('./bower.json')
@@ -64,21 +63,29 @@ gulp.task('thin-bower', ['bower'], function() {
 });
 
 // Minify Custom JS: -> "gulp build-js"
-gulp.task('build-js', function () {
+gulp.task('build:js', function () {
     return gulp.src('scripts/app/**/*.js')
+        .pipe(plugins.iife({
+            useStrict: true,
+            trimCode: true,
+            prependSemicolon: false,
+            bindThis: false,
+            params: ["window", "document", "$", "angular","undefined"],
+            args: ["window", "document", "jQuery", "angular"]
+        }))
         .pipe(plugins.jshint())
         .pipe(plugins.jshint.reporter('jshint-stylish'))
-        .pipe(gutil.env.type === 'production' ? plugins.uglify({
+        .pipe(plugins.uglify({
             output: {
                 'ascii_only': true
             }
-        }) : gutil.noop())
-        .pipe(plugins.concat('scripts.min.js'))
-        .pipe(gulp.dest('build'));
+        }))
+        .pipe(plugins.concat('custom.scripts.min.js'))
+        .pipe(gulp.dest('assets/js'));
 });
 
 // compile less into css -> "gulp build-css"
-gulp.task('build-css', function () {
+gulp.task('build:css', function () {
     return gulp.src('less/*.less')
         .pipe(plugins.plumber())
         .pipe(plugins.less())
