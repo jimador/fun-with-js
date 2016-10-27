@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sigarLandingApp')
-    .controller('HomeController', function($scope) {
+    .controller('HomeController', function ($scope) {
         var imageDir = 'assets/images/';
         $scope.loopInterval = 5000;
         $scope.noWrapSlides = true;
@@ -10,7 +10,7 @@ angular.module('sigarLandingApp')
         var slides = $scope.slides = [];
         var currIndex = 0;
 
-        $scope.addSlide = function(num) {
+        $scope.addSlide = function (num) {
             slides.push({
                 image: imageDir + num + '.jpg',
                 text: ['Nice image', 'Awesome photograph', 'That is so cool', 'I love that'][slides.length % 4],
@@ -18,8 +18,8 @@ angular.module('sigarLandingApp')
             });
         };
 
-				for(var i = 1; i <= 4; i++){
-					$scope.addSlide(i);
-				}
+        for (var i = 1; i <= 4; i++) {
+            $scope.addSlide(i);
+        }
 
     });

@@ -3,12 +3,12 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     plugins = require('gulp-load-plugins')({
-            rename: {
-                'gulp-live-server': 'serve',
-                'gulp-bower': 'bower',
-                'gulp-main-bower-files': 'bowerFiles'
-            }
-        });
+        rename: {
+            'gulp-live-server': 'serve',
+            'gulp-bower': 'bower',
+            'gulp-main-bower-files': 'bowerFiles'
+        }
+    });
 
 var del = require('del');
 
@@ -20,12 +20,12 @@ gulp.task('default', ['bower', 'thin:bower', 'build:css']);
 // del takes 2 params, patterns (paths or globs) and options (and files prepended with a .dot)
 // prepend with a ! [bang] to tell del NOT to delete something
 gulp.task('clean', function () {
-    return del(['assets/**', '!assets', '!assets/fonts', '!assets/images'], {dot: true});
+    return del(['assets/css/**', 'assets/js/**'], {dot: true});
 });
 
 // Clean bower too
 gulp.task('clean:all', function () {
-    return del(['assets/**', '!assets', '!assets/fonts', '!assets/images', 'bower_components/**'], {dot: true});
+    return del(['assets/css/**', 'assets/js/**', 'bower_components/**'], {dot: true});
 });
 
 // Run "gulp server"
@@ -57,14 +57,14 @@ gulp.task('build:min', ['default', 'build:js']);
 gulp.task('build:run', ['default', 'server']);
 
 // pull in all bower dependencies: "gulp bower"
-gulp.task('bower', function() {
+gulp.task('bower', function () {
     return plugins.bower()
         .pipe(gulp.dest('./bower_components'));
 });
 
 // This task will loop through all of the bower components and pull out the
 // .js files we care about: -> "gulp thin-bower"
-gulp.task('thin:bower', ['bower'], function() {
+gulp.task('thin:bower', ['bower'], function () {
     var filterJS = plugins.filter('**/*.js', {
         restore: true
     });
@@ -89,7 +89,7 @@ gulp.task('build:js', function () {
             trimCode: true,
             prependSemicolon: false,
             bindThis: false,
-            params: ["window", "document", "$", "angular","undefined"],
+            params: ["window", "document", "$", "angular", "undefined"],
             args: ["window", "document", "jQuery", "angular"]
         }))
         .pipe(plugins.jshint())
@@ -114,16 +114,16 @@ gulp.task('build:css', function () {
         })
         .pipe(plugins.autoprefixer({
             browsers: [
-                    '> 1%',
-                    'last 2 versions',
-                    'firefox >= 4',
-                    'safari 7',
-                    'safari 8',
-                    'IE 8',
-                    'IE 9',
-                    'IE 10',
-                    'IE 11'
-                ],
+                '> 1%',
+                'last 2 versions',
+                'firefox >= 4',
+                'safari 7',
+                'safari 8',
+                'IE 8',
+                'IE 9',
+                'IE 10',
+                'IE 11'
+            ],
             cascade: false
         }))
         .pipe(plugins.cssmin())
