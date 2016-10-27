@@ -23,7 +23,6 @@ bower_components/
 ######################
 # Intellij
 ######################
-.idea/**
 *.iml
 *.iws
 *.ipr
