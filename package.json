@@ -1,0 +1,24 @@
+{
+  "name": "home",
+  "version": "0.1.0",
+  "description": "",
+  "private": true,
+  "cacheDirectories": [
+    "./node_modules",
+    "./bower_components"
+  ],
+  "dependencies": {
+    "gulp": "~3.6.0",
+    "gulp-load-plugins": "1.3.0",
+    "gulp-main-bower-files": "^1.5.3"
+  },
+  "engines": {
+    "node": "^4.3"
+  },
+  "devDependencies": {
+    "gulp-filter": "^4.0.0",
+    "gulp-less": "^3.1.0",
+    "gulp-load-plugins": "^1.3.0",
+    "gulp-main-bower-files": "^1.5.3"
+  }
+}

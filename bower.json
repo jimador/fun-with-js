@@ -1,0 +1,40 @@
+{
+    "name": "sigar-home",
+    "version": "0.1.0",
+    "dependencies": {
+        "angular": "1.5.8",
+        "angular-aria": "1.5.8",
+        "angular-bootstrap": "2.2.0",
+        "angular-animate": "1.5.8",
+        "angular-loading-bar": "0.8.0",
+        "angular-resource": "1.5.8",
+        "angular-route": "1.5.8",
+        "angular-sanitize": "1.5.8",
+        "bootstrap": "3.3.7",
+        "jquery": "3.1.0",
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "package.json",
+        "src"
+    ],
+    "overrides": {
+        "angular": {
+            "dependencies": {
+                "jquery": "3.1.0"
+            }
+        },
+        "bootstrap": {
+            "main": [
+                "dist/css/bootstrap.css"
+            ]
+        }
+    },
+    "resolutions": {
+        "angular": "1.4.8",
+        "jquery": "2.1.4"
+    }
+}
