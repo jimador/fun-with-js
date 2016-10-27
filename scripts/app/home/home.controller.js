@@ -2,17 +2,17 @@
 
 angular.module('sigarLandingApp')
     .controller('HomeController', function($scope) {
-        var imageDir = '/images/';
+        var imageDir = 'assets/images/';
         $scope.loopInterval = 5000;
         $scope.noWrapSlides = true;
         $scope.active = 0;
-        $scope.leftImage = imageDir + 1;
+        $scope.leftImage = imageDir + 1 + '.jpg';
         var slides = $scope.slides = [];
         var currIndex = 0;
 
         $scope.addSlide = function(num) {
             slides.push({
-                image: imageDir + num,
+                image: imageDir + num + '.jpg',
                 text: ['Nice image', 'Awesome photograph', 'That is so cool', 'I love that'][slides.length % 4],
                 id: currIndex++
             });

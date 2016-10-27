@@ -1,18 +1,32 @@
 'use strict';
 
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var plugins = require('gulp-load-plugins')({
-        rename: {
-            'gulp-live-server': 'serve',
-            'gulp-bower': 'bower',
-            'gulp-main-bower-files': 'bowerFiles'
-        }
-    });
-// var del = require('del');
+var gulp = require('gulp'),
+    gutil = require('gulp-util'),
+    plugins = require('gulp-load-plugins')({
+            rename: {
+                'gulp-live-server': 'serve',
+                'gulp-bower': 'bower',
+                'gulp-main-bower-files': 'bowerFiles'
+            }
+        });
+
+var del = require('del');
+
 
 // Start Watching: Run "gulp"
 gulp.task('default', ['bower', 'thin:bower', 'build:css']);
+
+// Clean all EXCEPT bower components task.
+// del takes 2 params, patterns (paths or globs) and options (and files prepended with a .dot)
+// prepend with a ! [bang] to tell del NOT to delete something
+gulp.task('clean', function () {
+    return del(['assets/**', '!assets', '!assets/fonts', '!assets/images'], {dot: true});
+});
+
+// Clean bower too
+gulp.task('clean:all', function () {
+    return del(['assets/**', '!assets', '!assets/fonts', '!assets/images', 'bower_components/**'], {dot: true});
+});
 
 // Run "gulp server"
 gulp.task('server', ['serve', 'watch']);
@@ -33,6 +47,11 @@ gulp.task('serve', function () {
         server.notify.apply(server, [file]);
     });
 });
+
+// Build with minified JS. You can use gulp-inject to automate the
+// building of all of the script tags in your index.html so you don't
+// have to maintain what's pointing where by hand.
+gulp.task('build:min', ['default', 'build:js']);
 
 // Build and run app on 8888
 gulp.task('build:run', ['default', 'server']);
@@ -80,7 +99,7 @@ gulp.task('build:js', function () {
                 'ascii_only': true
             }
         }))
-        .pipe(plugins.concat('custom.scripts.min.js'))
+        .pipe(plugins.concat('app.min.js'))
         .pipe(gulp.dest('assets/js'));
 });
 
