@@ -18,7 +18,7 @@
 # Bower components - you don't have to ignore this, but everything is getting
   moved into scripts/libs
 ######################
-/bower_components/**
+bower_components/
 
 ######################
 # Intellij
