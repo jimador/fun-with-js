@@ -19,3 +19,13 @@
   moved into scripts/libs
 ######################
 /bower_components/**
+
+######################
+# Intellij
+######################
+.idea/**
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
