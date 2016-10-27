@@ -1,41 +1,57 @@
 'use strict';
 
 var gulp = require('gulp');
-var bower = require('gulp-bower');
-var mainBowerFiles = require('gulp-main-bower-files');
-var gulpFilter = require('gulp-filter');
-// var less = require('gulp-less');
-
 var gutil = require('gulp-util');
 var plugins = require('gulp-load-plugins')({
         rename: {
-            'gulp-live-server': 'serve'
+            'gulp-live-server': 'serve',
+            'gulp-bower': 'bower',
+            'gulp-main-bower-files': 'bowerFiles'
         }
     });
 
 // Start Watching: Run "gulp"
-gulp.task('default', ['watch']);
+gulp.task('default', ['bower', 'thin-bower', 'build-js', 'build-css']);
 
 // Run "gulp server"
 gulp.task('server', ['serve', 'watch']);
+
+// watch task
+gulp.task('watch', function () {
+    gulp.watch('scripts/libs/**/*.js', ['thin-bower']);
+    gulp.watch('scripts/app/**/*.js', ['build-js']);
+    gulp.watch('less/**/*.less', ['build-css']);
+});
+
+// Folder "/" serving at http://localhost:8888
+// Should use Livereload (http://livereload.com/extensions/)
+gulp.task('serve', function () {
+    var server = plugins.serve.static('/', 8888);
+    server.start();
+    gulp.watch(['scripts/**/*', 'less/**/*'], function (file) {
+        server.notify.apply(server, [file]);
+    });
+});
 
 // bower directory for main-bower-files task to pull from
 var config = {
     bowerDir: './bower_components'
 };
 
-// pull in all bower dependencies
+// pull in all bower dependencies: "gulp bower"
 gulp.task('bower', function() {
-    return bower()
+    return plugins.bower()
         .pipe(gulp.dest(config.bowerDir));
 });
 
-gulp.task('main-bower-files', ['bower'], function() {
-    var filterJS = gulpFilter('**/*.js', {
+// This task will loop through all of the bower components and pull out the
+// .js files we care about: -> "gulp thin-bower"
+gulp.task('thin-bower', ['bower'], function() {
+    var filterJS = plugins.gulpFilter('**/*.js', {
         restore: true
     });
     return gulp.src('./bower.json')
-        .pipe(mainBowerFiles({
+        .pipe(plugins.bowerFiles({
             overrides: {
                 bootstrap: {
                     ignore: true
@@ -44,11 +60,26 @@ gulp.task('main-bower-files', ['bower'], function() {
         }))
         .pipe(filterJS)
         .pipe(filterJS.restore)
-        .pipe(gulp.dest('./scripts/libs'));
+        .pipe(gulp.dest('scripts/libs'));
 });
 
+// Minify Custom JS: -> "gulp build-js"
+gulp.task('build-js', function () {
+    return gulp.src('scripts/app/**/*.js')
+        .pipe(plugins.jshint())
+        .pipe(plugins.jshint.reporter('jshint-stylish'))
+        .pipe(gutil.env.type === 'production' ? plugins.uglify({
+            output: {
+                'ascii_only': true
+            }
+        }) : gutil.noop())
+        .pipe(plugins.concat('scripts.min.js'))
+        .pipe(gulp.dest('build'));
+});
+
+// compile less into css -> "gulp build-css"
 gulp.task('build-css', function () {
-    return gulp.src('assets/less/*.less')
+    return gulp.src('less/*.less')
         .pipe(plugins.plumber())
         .pipe(plugins.less())
         .on('error', function (err) {
@@ -70,24 +101,6 @@ gulp.task('build-css', function () {
             cascade: false
         }))
         .pipe(plugins.cssmin())
-        .pipe(gulp.dest('build')).on('error', gutil.log);
+        .pipe(gulp.dest('./assets/css')).on('error', gutil.log);
 });
 
-// Default task
-gulp.task('watch', function () {
-    gulp.watch('assets/js/libs/**/*.js', ['squish-jquery']);
-    gulp.watch('assets/js/*.js', ['build-js']);
-    gulp.watch('assets/less/**/*.less', ['build-css']);
-});
-
-// Folder "/" serving at http://localhost:8888
-// Should use Livereload (http://livereload.com/extensions/)
-gulp.task('serve', function () {
-    var server = plugins.serve.static('/', 8888);
-    server.start();
-    gulp.watch(['build/*'], function (file) {
-        server.notify.apply(server, [file]);
-    });
-});
-
-// gulp.task('default', ['bower', 'main-bower-files', 'build-less']);
