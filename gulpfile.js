@@ -14,7 +14,7 @@ var del = require('del');
 
 
 // Start Watching: Run "gulp"
-gulp.task('default', ['bower', 'thin:bower', 'build:css']);
+gulp.task('default', ['clean', 'bower', 'thin:bower', 'build:css']);
 
 // Clean all EXCEPT bower components task.
 // del takes 2 params, patterns (paths or globs) and options (and files prepended with a .dot)
