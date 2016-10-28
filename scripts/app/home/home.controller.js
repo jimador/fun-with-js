@@ -3,7 +3,7 @@
 angular.module('sigarLandingApp')
     .controller('HomeController', function ($scope) {
         var imageDir = 'assets/images/';
-        $scope.loopInterval = 5000;
+        $scope.loopInterval = 9000;
         $scope.noWrapSlides = true;
         $scope.active = 0;
         $scope.leftImage = imageDir + 1 + '.jpg';

@@ -126,7 +126,5 @@ gulp.task('build:css', function () {
             ],
             cascade: false
         }))
-        .pipe(plugins.cssmin())
         .pipe(gulp.dest('./assets/css')).on('error', gutil.log);
 });
-
