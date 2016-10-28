@@ -1,12 +1,18 @@
 <div>
     <div class='row'>
-        <div class='col-lg-5'>
+        <div class='col-lg-4 custom-carousel' id='news-carousel'>
             <div uib-carousel active='active' interval='loopInterval' no-wrap='noWrapSlides'>
                 <div uib-slide ng-repeat='slide in slides track by slide.id' index='slide.id'>
-                    <img ng-src='{{slide.image}}'>
+                    <img class='img-responsive img-rounded' ng-src='{{slide.image}}'>
+                    <div class="carousel-caption">
+                        <p>{{slide.text | limitTo: 130 }}{{slide.text.length > 20 ? '...' : ''}}</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class='col-lg-4'><img ng-src='{{leftImage}}'/></div>
+        <div class='col-lg-4 right-img news-links' id='news-links'><img class='img-responsive img-rounded' ng-src='{{leftImage}}'/></div>
+        <div class='col-lg-4 text-center another-div'>
+          <h1>ANOTHER DIV!!!</h1>
+        </div>
     </div>
 </div>
