@@ -1,18 +1,110 @@
-<div>
-    <div class='row'>
-        <div class='col-lg-4 custom-carousel' id='news-carousel'>
-            <div uib-carousel active='active' interval='loopInterval' no-wrap='noWrapSlides'>
-                <div uib-slide ng-repeat='slide in slides track by slide.id' index='slide.id'>
-                    <img class='img-responsive img-rounded' ng-src='{{slide.image}}'>
-                    <div class="carousel-caption">
-                        <p>{{slide.text | limitTo: 130 }}{{slide.text.length > 20 ? '...' : ''}}</p>
-                    </div>
-                </div>
+<div class="container">
+    <div class="row">
+        <form ng-controller="PersonalInfoCtrl as ctrl"
+              name="personalInfoForm"
+              novalidate
+              class="css-form"
+              role="form"
+              ng-submit="ctrl.submit(personalInfoForm.$valid, person)">
+
+            <div class="col-lg-3 col-xs-2 form-group">
+                <label class="control-label">First Name:</label>
+                <input type="text" class="form-control"
+                       ng-model="person.firstName" placeholder="Homer"
+                       name="firstName" required>
             </div>
-        </div>
-        <div class='col-lg-4 right-img news-links' id='news-links'><img class='img-responsive img-rounded' ng-src='{{leftImage}}'/></div>
-        <div class='col-lg-4 text-center another-div'>
-          <h1>ANOTHER DIV!!!</h1>
-        </div>
+            <div class="col-lg-3 col-xs-2 form-group">
+                <label class="control-label">Last Name:</label>
+                <input type="text" class="form-control"
+                       placeHolder="Simpson" ng-model="person.lastName"
+                       name="lastName" required>
+            </div>
+            <div class="col-lg-3 col-xs-2 form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+                <label class="control-label"><i class="fa fa-calendar"></i> Hire Date: </label>
+                <input type="datetime" class="form-control" ng-model="person.hireDate" name="hireDate" bs-datepicker>
+            </div>
+            <div class="col-lg-3 col-xs-2 form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
+                <label class="control-label"><i class="fa fa-calendar"></i> Start Date: </label>
+                <input type="datetime" class="form-control" ng-model="person.startDate" name="startDate" bs-datepicker>
+            </div>
+            <div class="col-lg-12 form-group">
+                <label class="control-label">Street Line 1: </label>
+                <input type="text" placeHolder="123 Fake St" class="form-control"
+                       ng-model="person.address.streetOne" name="streetOne" required>
+                <label class="control-label">Street Line 2: </label>
+                <input type="text" class="form-control" ng-model="person.address.streetTwo" name="streetTwo">
+                <label class="control-label">City: </label>
+                <input type="text" class="form-control" placeHolder="Springfield"
+                       ng-model="person.address.city" name="city" required>
+            </div>
+            <div class="col-lg-4">
+                <label class="control-label">State/Provience: </label>
+                <input type="text" class="form-control" ng-model="person.address.state"
+                       bs-options="state.abbreviation as state.name for state in states" placeholder="Enter state"
+                       bs-typeahead required>
+            </div>
+            <div class="col-lg-4 form-group">
+                <label class="control-label">Zip/Postal code: </label>
+                <input type="text" class="form-control" placeHolder="12345"
+                       ng-model="person.address.zip" name="zip" required>
+            </div>
+            <div class="col-lg-2 form-group">
+                <label class="control-label">Country: </label>
+                <input type="text" class="form-control" placeHolder="United States"
+                       ng-model="person.address.country" name="country" required>
+            </div>
+            <div class="col-lg-2 form-group">
+                <label class="control-label">Phone Number: </label>
+                <input type="text" class="form-control" placeHolder="555-555-4321"
+                       ng-model="person.phoneNumber" required>
+            </div>
+            <div class="col-lg-2 form-group">
+                <label class="control-label">Salary: </label>
+                <input type="number" class="form-control" placeHolder="Enter Salary"
+                       ng-model="person.salary" required>
+            </div>
+            <div class="col-lg-3 form-group">
+                <label class="control-label">Title: </label>
+                <input type="text" class="form-control" placeHolder="Nuclear Safety Inspector"
+                       ng-model="person.title" required>
+            </div>
+            <div class="col-lg-3 form-group">
+                <label class="control-label">Position: </label>
+                <input type="text" class="form-control" placeHolder="Nuclear Safety Inspector"
+                       ng-model="person.position" required>
+            </div>
+            <div class="col-lg-4 form-group">
+                <label class="control-label">Project: </label>
+                <input type="text" class="form-control" placeHolder="Project name"
+                       ng-model="person.project" required>
+            </div>
+            <div class="col-lg-4 form-group">
+                <label class="control-label">Supervisor: </label>
+                <input type="text" class="form-control" placeHolder="Waylon Smithers"
+                       ng-model="person.supervisor" required>
+            </div>
+
+            <div class="col-lg-2">
+                <label class="control-label">Clearance:</label>
+                <button type="button"
+                        class="btn btn-default form-control"
+                        placeHolder="Choose Clearance"
+                        data-animation="am-flip-x"
+                        data-html="1"
+                        required
+                        ng-model="person.clearance"
+                        bs-options="clearance.value as clearance.label for clearance in clearances"
+                        bs-select>
+                    <span class="carat"></span>
+                </button>
+            </div>
+            <div class="col-lg-2 top-buffer">
+                <button type="button"
+                        class="btn btn-primary form-control"
+                        ng-click="ctrl.reset()">Reset</button>
+            </div>
+            <input class="col-lg-2 btn btn-default form-control"
+                   ng-disabled="personalInfoForm.$invalid" type="submit" />
+        </form>
     </div>
 </div>
